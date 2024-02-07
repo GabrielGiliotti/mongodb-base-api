@@ -15,34 +15,34 @@ public class Repository<T> : IRepository<T> where T : Default
         _collection = _context.GetCollection<T>(typeof(T).Name);
     }
 
-    public async Task Add(T obj)
+    public virtual async Task Add(T obj)
     {
         await _collection.InsertOneAsync(obj);
     }
 
-    public async Task<T> GetById(ObjectId id)
+    public virtual async Task<T> GetById(ObjectId id)
     {
         var data = await _collection.FindAsync(Builders <T>.Filter.Eq("_id", id));
         return data.FirstOrDefault();
     }
 
-    public async Task<IEnumerable<T>> GetAll()
+    public virtual async Task<IEnumerable<T>> GetAll()
     {
         var all = await _collection.FindAsync(Builders<T>.Filter.Empty);
         return all.ToList();
     }
 
-    public async Task Update(T obj)
+    public virtual async Task Update(T obj)
     {
         await _collection.ReplaceOneAsync(Builders<T>.Filter.Eq("_id", new ObjectId(obj.Id)), obj);
     }
 
-    public async Task Remove(ObjectId id) 
+    public virtual async Task Remove(ObjectId id) 
     {
         await _collection.DeleteOneAsync(Builders<T>.Filter.Eq("_id", id));
     }
 
-    public void Dispose()
+    public virtual void Dispose()
     {
         GC.SuppressFinalize(this);
     }
