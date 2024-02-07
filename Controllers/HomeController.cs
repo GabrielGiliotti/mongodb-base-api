@@ -14,7 +14,7 @@ public class HomeController : ControllerBase
     }
 
     [HttpGet]
-    public ActionResult<string> GetHome()
+    public IActionResult GetHome()
     {
         var msg = $"Welcome ! API Started at {DateTime.Now.ToLongTimeString()}";
         _logger.LogInformation(msg);

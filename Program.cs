@@ -1,20 +1,27 @@
 using MongoDB.Driver;
 using mongodb_base_api.Infrastructure.System;
+using mongodb_base_api.Infrastructure.Database;
+using mongodb_base_api.Repository;
+using mongodb_base_api.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
 // Add connection string
-builder.Services.Configure<Settings>(builder.Configuration.GetSection("DbSettings"));
+builder.Services.Configure<Settings>(builder.Configuration.GetSection("Settings"));
 
 // Register mongoDb configuration as a singleton object
 builder.Services.AddScoped( options => 
 {
-    var settings = builder.Configuration.GetSection("DbSettings").Get<Settings>()!;
+    var settings = builder.Configuration.GetSection("Settings").Get<Settings>()!;
     var client = new MongoClient(settings.ConnectionString);
     return client.GetDatabase(settings.DatabaseName);
 });
+
+builder.Services.AddScoped<IMongoContext, MongoContext>();
+builder.Services.AddScoped<IRepository<User>, Repository<User>>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
