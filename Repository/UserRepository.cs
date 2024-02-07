@@ -1,7 +1,8 @@
+using MongoDB.Bson;
 using mongodb_base_api.Infrastructure.Database;
 using mongodb_base_api.Models;
 
-namespace mongodb_base_api.Repository;
+namespace mongodb_base_api.Repositories;
 
 public class UserRepository : IUserRepository
 {
@@ -17,7 +18,7 @@ public class UserRepository : IUserRepository
         await _userRepository.Add(obj);
     }
 
-    public async Task<User> GetUserById(Guid id)
+    public async Task<User> GetUserById(ObjectId id)
     {
         return await _userRepository.GetById(id);
     }
@@ -27,7 +28,7 @@ public class UserRepository : IUserRepository
         return await _userRepository.GetAll();
     }
 
-    public async Task RemoveUser(Guid id)
+    public async Task RemoveUser(ObjectId id)
     {
         await _userRepository.Remove(id);
     }

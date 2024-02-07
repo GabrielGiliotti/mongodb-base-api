@@ -1,8 +1,9 @@
 using MongoDB.Driver;
 using mongodb_base_api.Infrastructure.System;
 using mongodb_base_api.Infrastructure.Database;
-using mongodb_base_api.Repository;
+using mongodb_base_api.Repositories;
 using mongodb_base_api.Models;
+using mongodb_base_api.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,6 +23,8 @@ builder.Services.AddScoped( options =>
 builder.Services.AddScoped<IMongoContext, MongoContext>();
 builder.Services.AddScoped<IRepository<User>, Repository<User>>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IUserService, UserService>();
+
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

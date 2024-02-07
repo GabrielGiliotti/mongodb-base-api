@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
-using mongodb_base_api.Models;
-using mongodb_base_api.Repository;
+using mongodb_base_api.DTOs;
+using mongodb_base_api.Services;
 
 namespace mongodb_base_api.Controllers;
 
@@ -8,25 +8,29 @@ namespace mongodb_base_api.Controllers;
 [Route("[controller]")]
 public class UserController : ControllerBase
 {
-    private readonly IUserRepository _userRepository;
+    private readonly IUserService _userService;
 
-    public UserController(IUserRepository userRepository)
+    public UserController(IUserService userService)
     {
-        _userRepository = userRepository;
+        _userService = userService;
     }
 
     [HttpPost]
-    public async Task<IActionResult> AddUser(User user)
+    public async Task<IActionResult> AddUser(UserDto user)
     {
-        await _userRepository.AddUser(user);
+        await _userService.AddUser(user);
         return Ok("New user registered");
     }
 
     [HttpGet]
     public async Task<IActionResult> GetUsers()
     {
-        return Ok(await _userRepository.GetUsers());
+        return Ok(await _userService.GetUsers());
     }
 
-
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetUsers(string id)
+    {
+        return Ok(await _userService.GetUserById(id));
+    }
 }

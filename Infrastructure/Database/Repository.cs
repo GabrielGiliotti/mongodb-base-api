@@ -1,3 +1,4 @@
+using MongoDB.Bson;
 using MongoDB.Driver;
 using mongodb_base_api.Models;
 
@@ -19,7 +20,7 @@ public class Repository<T> : IRepository<T> where T : Default
         await _collection.InsertOneAsync(obj);
     }
 
-    public async Task<T> GetById(Guid id)
+    public async Task<T> GetById(ObjectId id)
     {
         var data = await _collection.FindAsync(Builders <T>.Filter.Eq("_id", id));
         return data.FirstOrDefault();
@@ -36,7 +37,7 @@ public class Repository<T> : IRepository<T> where T : Default
         await _collection.ReplaceOneAsync(Builders<T>.Filter.Eq("_id", obj.Id), obj);
     }
 
-    public async Task Remove(Guid id) 
+    public async Task Remove(ObjectId id) 
     {
         await _collection.DeleteOneAsync(Builders<T>.Filter.Eq("_id", id));
     }

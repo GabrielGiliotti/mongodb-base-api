@@ -1,12 +1,13 @@
+using MongoDB.Bson;
 using mongodb_base_api.Models;
 
-namespace mongodb_base_api.Repository;
+namespace mongodb_base_api.Repositories;
 
 public interface IUserRepository
 {
     Task AddUser(User obj);
-    Task<User> GetUserById(Guid id);
+    Task<User> GetUserById(ObjectId id);
     Task<IEnumerable<User>> GetUsers();
     Task UpdateUser(User obj);
-    Task RemoveUser(Guid id);
+    Task RemoveUser(ObjectId id);
 }
