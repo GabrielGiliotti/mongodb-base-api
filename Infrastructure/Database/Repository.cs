@@ -34,7 +34,7 @@ public class Repository<T> : IRepository<T> where T : Default
 
     public async Task Update(T obj)
     {
-        await _collection.ReplaceOneAsync(Builders<T>.Filter.Eq("_id", obj.Id), obj);
+        await _collection.ReplaceOneAsync(Builders<T>.Filter.Eq("_id", new ObjectId(obj.Id)), obj);
     }
 
     public async Task Remove(ObjectId id) 

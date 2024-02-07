@@ -66,13 +66,23 @@ public class UserService : IUserService
         return list;
     }
 
-    public Task RemoveUser(string id)
+    public async Task RemoveUser(string id)
     {
-        throw new NotImplementedException();
+        await _userRepository.RemoveUser(new ObjectId(id));
     }
 
-    public Task UpdateUser(UserDto obj)
+    public async Task UpdateUser(UserUpdateDto obj)
     {
-        throw new NotImplementedException();
+        var user = new User 
+        {
+            Id = obj.Id,
+            Name = obj.Name,
+            Email = obj.Email,
+            Password = obj.Password,
+            IsActive = obj.IsActive,
+            CreatedAt = obj.CreatedAt
+        };
+
+        await _userRepository.UpdateUser(user);
     }
 }
