@@ -1,6 +1,6 @@
 using MongoDB.Driver;
 using Microsoft.Extensions.Options;
-using mongodb_base_api.Infrastructure.System;
+using mongodb_base_api.Infrastructure.System.Models;
 
 namespace mongodb_base_api.Infrastructure.Database;
 

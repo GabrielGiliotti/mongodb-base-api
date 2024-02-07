@@ -1,4 +1,4 @@
-namespace mongodb_base_api.Infrastructure.System;
+namespace mongodb_base_api.Infrastructure.System.Models;
 
 public class Settings
 {

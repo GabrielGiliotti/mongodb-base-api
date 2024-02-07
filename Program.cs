@@ -1,9 +1,11 @@
 using MongoDB.Driver;
-using mongodb_base_api.Infrastructure.System;
-using mongodb_base_api.Infrastructure.Database;
-using mongodb_base_api.Repositories;
 using mongodb_base_api.Models;
 using mongodb_base_api.Services;
+using mongodb_base_api.Repositories;
+using mongodb_base_api.Infrastructure.Database;
+using mongodb_base_api.Infrastructure.System.Models;
+using mongodb_base_api.Infrastructure.System.Middlewares;
+using mongodb_base_api.Profiles;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,6 +20,10 @@ builder.Services.AddScoped( options =>
     var settings = builder.Configuration.GetSection("Settings").Get<Settings>()!;
     var client = new MongoClient(settings.ConnectionString);
     return client.GetDatabase(settings.DatabaseName);
+});
+
+builder.Services.AddAutoMapper(cfg => {
+    cfg.AddProfile<UserProfile>();
 });
 
 builder.Services.AddScoped<IMongoContext, MongoContext>();
@@ -39,6 +45,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseMiddleware<ExceptionMiddleware>();
 
 app.UseHttpsRedirection();
 

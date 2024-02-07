@@ -1,3 +1,4 @@
+using AutoMapper;
 using MongoDB.Bson;
 using mongodb_base_api.DTOs;
 using mongodb_base_api.Models;
@@ -7,63 +8,47 @@ namespace mongodb_base_api.Services;
 
 public class UserService : IUserService
 {
+    private readonly IMapper _mapper;
     private readonly IUserRepository _userRepository;
     
-    public UserService(IUserRepository userRepository) 
+    public UserService(IUserRepository userRepository, IMapper mapper) 
     {
+        _mapper = mapper;
         _userRepository = userRepository;
     }
 
     public async Task AddUser(UserDto obj)
     {
-        var user = new User 
-        {
-            Name = obj.Name,
-            Email = obj.Email,
-            Password = obj.Password,
-            IsActive = obj.IsActive,
-            CreatedAt = obj.CreatedAt
-        };
+        var user = _mapper.Map<User>(obj);
 
-        await _userRepository.AddUser(user);
+        if(user != null)
+            await _userRepository.AddUser(user);
+        else
+            throw new Exception("Error when adding User");
     }
 
     public async Task<UserDto> GetUserById(string id)
     {
         var user = await _userRepository.GetUserById(new ObjectId(id));
 
-        var dto = new UserDto 
-        {
-            Name = user.Name,
-            Email = user.Email,
-            Password = user.Password,
-            IsActive = user.IsActive,
-            CreatedAt = user.CreatedAt
-        };
+        var dto = _mapper.Map<UserDto>(user);
 
-        return dto;
+        if(dto != null)
+            return dto;
+        else 
+            throw new Exception("Error while mapping UserDto");
     }
 
     public async Task<IEnumerable<UserDto>> GetUsers()
     {
         var users = await _userRepository.GetUsers();
-        var list = new List<UserDto>();
-
-        foreach (var user in users) 
-        {
-            var dto = new UserDto 
-            {
-                Name = user.Name,
-                Email = user.Email,
-                Password = user.Password,
-                IsActive = user.IsActive,
-                CreatedAt = user.CreatedAt
-            };
-
-            list.Add(dto);
-        }
         
-        return list;
+        var list = _mapper.Map<IEnumerable<UserDto>>(users);
+
+        if(list != null)
+            return list;
+        else 
+            throw new Exception("Error while mapping User List");
     }
 
     public async Task RemoveUser(string id)
@@ -73,16 +58,11 @@ public class UserService : IUserService
 
     public async Task UpdateUser(UserUpdateDto obj)
     {
-        var user = new User 
-        {
-            Id = obj.Id,
-            Name = obj.Name,
-            Email = obj.Email,
-            Password = obj.Password,
-            IsActive = obj.IsActive,
-            CreatedAt = obj.CreatedAt
-        };
+        var user = _mapper.Map<User>(obj);
 
-        await _userRepository.UpdateUser(user);
+        if(user != null)
+            await _userRepository.UpdateUser(user);
+        else
+            throw new Exception("Error when updating User");
     }
 }
